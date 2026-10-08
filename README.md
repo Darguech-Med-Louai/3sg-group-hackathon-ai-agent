@@ -61,7 +61,23 @@ limites de chaque flux.
   proviennent du squelette de projet et ne sont pas requis pour consulter les
   données de démonstration.
 
-## Captures d’écran
+## Schéma Explicatif
+
+![Schéma Explicatif](images/schema-explicatif.png)
+
+## n8n
+
+![n8n api](images/n8n.png)
+
+## Dashboard
+
+![Interface du Dashbard](images/dashboard.png)
+
+- ▶️ [Voir la démo](https://drive.google.com/file/d/167o1dj0yNZRoeuPz-w7uMQmWDFr18WqY/view?usp=sharing)
+
+## Chatbot
+
+![Interface de Tchati.ai](images/chatbot.png)
 
 ![Échange de démarrage avec Tchati.ai](images/chatbot-01.jpg)
 
@@ -69,11 +85,11 @@ limites de chaque flux.
 
 ![Réponse de Tchati.ai en derja](images/chatbot-03.jpg)
 
-## Présentation et démo
+- ▶️ [Voir la démo](https://drive.google.com/file/d/15MvZr0vbj9_iGtKLACmlNMgRUS8zoHD-/view?usp=sharing)
+
+## Présentation
 
 - [Présentation du hackathon (PDF)](presentation/3sg-group-presentation.pdf)
-- [Présentation source (PPTX)](presentation/3sg-group-presentation.pptx)
-- ▶️ [Voir la démo](video/demo.mp4)
 
 ## Installation et exécution
 
