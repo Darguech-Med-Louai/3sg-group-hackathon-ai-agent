@@ -73,7 +73,7 @@ limites de chaque flux.
 
 ![Interface du Dashbard](images/dashboard.png)
 
-- ▶️ [Voir la démo](https://drive.google.com/file/d/167o1dj0yNZRoeuPz-w7uMQmWDFr18WqY/view?usp=sharing)
+- ▶️ [Voir la démo](https://drive.google.com/file/d/15MvZr0vbj9_iGtKLACmlNMgRUS8zoHD-/view?usp=sharing)
 
 ## Chatbot
 
@@ -85,7 +85,7 @@ limites de chaque flux.
 
 ![Réponse de Tchati.ai en derja](images/chatbot-03.jpg)
 
-- ▶️ [Voir la démo](https://drive.google.com/file/d/15MvZr0vbj9_iGtKLACmlNMgRUS8zoHD-/view?usp=sharing)
+- ▶️ [Voir la démo](https://drive.google.com/file/d/167o1dj0yNZRoeuPz-w7uMQmWDFr18WqY/view?usp=sharing)
 
 ## Présentation
 
