@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique Chatbot - Recherche</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --red: #C0392B; --red-dark: #922B21; --red-light: #E74C3C;
+            --gold: #C9912A; --cream: #FDF6EC; --ink: #1C1510; --text-muted: #7A6A52;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--cream);
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--gold);
+        }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header p { opacity: 0.9; }
+        
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--gold);
+        }
+        .search-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-inputs input, .search-inputs select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+        }
+        .btn-search {
+            background: linear-gradient(135deg, var(--red-dark), var(--red-light));
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-search:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .btn-reset {
+            background: var(--text-muted);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .results-info {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .msg-result {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .msg-result.user { border-left-color: var(--red-dark); background: #fff5f5; }
+        .msg-result.bot { border-left-color: var(--gold); background: #fffef5; }
+        
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .msg-sender {
+            font-weight: 600;
+            color: var(--ink);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .msg-sender.user { color: var(--red-dark); }
+        .msg-sender.bot { color: var(--gold); }
+        
+        .msg-text {
+            color: var(--ink);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        .msg-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 20px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+        }
+        
+        @media (max-width: 768px) {
+            .search-inputs { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 Historique Chatbot</h1>
+        <p>Recherchez et filtrez les messages par mots-clés</p>
+    </div>
+
+    <div class="search-box">
+        <div class="search-inputs">
+            <input type="text" id="keywordInput" placeholder="Entrez un mot-clé...">
+            <input type="text" id="sessionInput" placeholder="ID Session (optionnel)">
+            <select id="senderSelect">
+                <option value="">Tous les messages</option>
+                <option value="user">Messages utilisateur</option>
+                <option value="bot">Réponses bot</option>
+            </select>
+            <button class="btn-search" onclick="searchMessages()">Rechercher</button>
+            <button class="btn-reset" onclick="resetSearch()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div id="resultsContainer">
+        <p class="results-info">Entrez un mot-clé pour commencer la recherche...</p>
+    </div>
+
+    <script>
+        function searchMessages() {
+            const keyword = document.getElementById('keywordInput').value.trim();
+            const sessionId = document.getElementById('sessionInput').value.trim();
+            const sender = document.getElementById('senderSelect').value;
+
+            if (!keyword && !sessionId) {
+                alert('Veuillez entrer au moins un mot-clé ou une session ID');
+                return;
+            }
+
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '<p class="loading">Recherche en cours...</p>';
+
+            let url = 'search_messages.php?';
+            if (keyword) url += 'keyword=' + encodeURIComponent(keyword);
+            if (sessionId) url += (keyword ? '&' : '') + 'session_id=' + encodeURIComponent(sessionId);
+            if (sender) url += (keyword || sessionId ? '&' : '') + 'sender=' + encodeURIComponent(sender);
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        container.innerHTML = '<p class="no-results">Erreur: ' + data.error + '</p>';
+                        return;
+                    }
+
+                    if (data.count === 0) {
+                        container.innerHTML = '<p class="no-results">Aucun message trouvé.</p>';
+                        return;
+                    }
+
+                    let html = '<p class="results-info">📊 ' + data.count + ' message(s) trouvé(s)</p><div class="messages-container">';
+                    data.messages.forEach(msg => {
+                        const date = new Date(msg.timestamp);
+                        const dateStr = date.toLocaleString('fr-TN', { 
+                            year: 'numeric', month: '2-digit', day: '2-digit',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                        });
+
+                        html += `
+                            <div class="msg-result ${msg.sender}">
+                                <div class="msg-header">
+                                    <span class="msg-sender">${msg.sender === 'user' ? '👤 Utilisateur' : '🤖 Bot'}</span>
+                                    <span>${dateStr}</span>
+                                </div>
+                                <div class="msg-text">${escapeHtml(msg.message)}</div>
+                                <div class="msg-meta">
+                                    <span>ID: ${msg.id}</span>
+                                    <span>Session: ${msg.session_id}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+
+                    container.innerHTML = html;
+                })
+                .catch(err => {
+                    container.innerHTML = '<p class="no-results">Erreur de connexion: ' + err.message + '</p>';
+                });
+        }
+
+        function resetSearch() {
+            document.getElementById('keywordInput').value = '';
+            document.getElementById('sessionInput').value = '';
+            document.getElementById('senderSelect').value = '';
+            document.getElementById('resultsContainer').innerHTML = 
+                '<p class="results-info">Entrez un mot-clé pour commencer la recherche...</p>';
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Recherche quand on appuie sur Entrée
+        document.getElementById('keywordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchMessages();
+        });
+    </script>
+</body>
+</html>

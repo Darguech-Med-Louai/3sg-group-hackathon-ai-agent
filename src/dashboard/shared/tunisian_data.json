@@ -1,0 +1,122 @@
+{
+  "kpis": {
+    "digitalPenetration": 68.5,
+    "consumptionIndex": 72.3,
+    "urbanMobility": 64.2,
+    "publicSentiment": 7.1,
+    "ecommerceAdoption": 54.3,
+    "averageBasketSize": 142.5,
+    "customerSatisfaction": 7.8,
+    "churnRisk": 15.8
+  },
+  "governorates": [
+    {"id": 1, "name": "Tunis", "population": 1056247, "urbanization": 98, "lat": 36.8065, "lon": 10.1815, "behaviors": {"digital": 92, "ecommerce": 88, "traditional": 35, "social": 95, "basket": 210, "topCategory": "Technologie"}},
+    {"id": 2, "name": "Ariana", "population": 560000, "urbanization": 95, "lat": 36.8667, "lon": 10.1667, "behaviors": {"digital": 89, "ecommerce": 82, "traditional": 40, "social": 91, "basket": 195, "topCategory": "Mode"}},
+    {"id": 3, "name": "Ben Arous", "population": 620000, "urbanization": 92, "lat": 36.7, "lon": 10.2333, "behaviors": {"digital": 85, "ecommerce": 75, "traditional": 45, "social": 88, "basket": 170, "topCategory": "Alimentaire"}},
+    {"id": 4, "name": "Manouba", "population": 410000, "urbanization": 90, "lat": 36.8, "lon": 10.0, "behaviors": {"digital": 82, "ecommerce": 68, "traditional": 50, "social": 84, "basket": 155, "topCategory": "Services"}},
+    {"id": 5, "name": "Nabeul", "population": 815000, "urbanization": 72, "lat": 36.4558, "lon": 10.7361, "behaviors": {"digital": 78, "ecommerce": 65, "traditional": 65, "social": 80, "basket": 140, "topCategory": "Tourisme"}},
+    {"id": 6, "name": "Zaghouan", "population": 175000, "urbanization": 45, "lat": 36.4, "lon": 10.1, "behaviors": {"digital": 65, "ecommerce": 42, "traditional": 82, "social": 68, "basket": 110, "topCategory": "Agricole"}},
+    {"id": 7, "name": "Bizerte", "population": 568000, "urbanization": 75, "lat": 37.2744, "lon": 9.8739, "behaviors": {"digital": 75, "ecommerce": 58, "traditional": 70, "social": 78, "basket": 135, "topCategory": "Industrie"}},
+    {"id": 8, "name": "Beja", "population": 305000, "urbanization": 52, "lat": 36.7333, "lon": 9.1833, "behaviors": {"digital": 60, "ecommerce": 35, "traditional": 88, "social": 62, "basket": 95, "topCategory": "Alimentaire"}},
+    {"id": 9, "name": "Jendouba", "population": 402000, "urbanization": 42, "lat": 36.5, "lon": 8.78, "behaviors": {"digital": 58, "ecommerce": 32, "traditional": 92, "social": 60, "basket": 90, "topCategory": "Agricole"}},
+    {"id": 10, "name": "Le Kef", "population": 245000, "urbanization": 40, "lat": 36.17, "lon": 8.71, "behaviors": {"digital": 55, "ecommerce": 30, "traditional": 90, "social": 58, "basket": 85, "topCategory": "Agricole"}},
+    {"id": 11, "name": "Siliana", "population": 225000, "urbanization": 40, "lat": 36.0, "lon": 9.3, "behaviors": {"digital": 52, "ecommerce": 28, "traditional": 94, "social": 55, "basket": 80, "topCategory": "Agricole"}},
+    {"id": 12, "name": "Sousse", "population": 688000, "urbanization": 82, "lat": 35.8256, "lon": 10.6369, "behaviors": {"digital": 88, "ecommerce": 78, "traditional": 52, "social": 89, "basket": 180, "topCategory": "Loisirs"}},
+    {"id": 13, "name": "Monastir", "population": 500000, "urbanization": 75, "lat": 35.7667, "lon": 10.8167, "behaviors": {"digital": 84, "ecommerce": 72, "traditional": 58, "social": 86, "basket": 165, "topCategory": "Textile"}},
+    {"id": 14, "name": "Mahdia", "population": 405000, "urbanization": 68, "lat": 35.5047, "lon": 11.0625, "behaviors": {"digital": 72, "ecommerce": 55, "traditional": 75, "social": 74, "basket": 130, "topCategory": "Alimentaire"}},
+    {"id": 15, "name": "Sfax", "population": 955000, "urbanization": 85, "lat": 34.7405, "lon": 10.7603, "behaviors": {"digital": 86, "ecommerce": 80, "traditional": 60, "social": 87, "basket": 190, "topCategory": "Commerce"}},
+    {"id": 16, "name": "Kairouan", "population": 570000, "urbanization": 65, "lat": 35.6711, "lon": 10.1056, "behaviors": {"digital": 62, "ecommerce": 40, "traditional": 85, "social": 64, "basket": 105, "topCategory": "Artisanat"}},
+    {"id": 17, "name": "Kasserine", "population": 438000, "urbanization": 55, "lat": 35.1673, "lon": 8.8339, "behaviors": {"digital": 54, "ecommerce": 32, "traditional": 91, "social": 56, "basket": 88, "topCategory": "Agricole"}},
+    {"id": 18, "name": "Sidi Bouzid", "population": 403000, "urbanization": 48, "lat": 35.0372, "lon": 9.4897, "behaviors": {"digital": 52, "ecommerce": 30, "traditional": 93, "social": 54, "basket": 85, "topCategory": "Agricole"}},
+    {"id": 19, "name": "Gabes", "population": 373000, "urbanization": 68, "lat": 33.8869, "lon": 10.0994, "behaviors": {"digital": 68, "ecommerce": 48, "traditional": 78, "social": 70, "basket": 120, "topCategory": "Industrie"}},
+    {"id": 20, "name": "Medenine", "population": 494000, "urbanization": 52, "lat": 33.3547, "lon": 10.5064, "behaviors": {"digital": 66, "ecommerce": 45, "traditional": 80, "social": 68, "basket": 115, "topCategory": "Commerce"}},
+    {"id": 21, "name": "Tozeur", "population": 105000, "urbanization": 55, "lat": 33.9197, "lon": 8.1353, "behaviors": {"digital": 70, "ecommerce": 52, "traditional": 75, "social": 72, "basket": 125, "topCategory": "Tourisme"}},
+    {"id": 22, "name": "Gafsa", "population": 335000, "urbanization": 60, "lat": 34.4258, "lon": 8.7842, "behaviors": {"digital": 64, "ecommerce": 42, "traditional": 84, "social": 66, "basket": 108, "topCategory": "Mines"}},
+    {"id": 23, "name": "Kebili", "population": 156000, "urbanization": 50, "lat": 33.7089, "lon": 8.9658, "behaviors": {"digital": 62, "ecommerce": 38, "traditional": 86, "social": 64, "basket": 102, "topCategory": "Agricole"}},
+    {"id": 24, "name": "Tataouine", "population": 145000, "urbanization": 48, "lat": 32.9289, "lon": 10.4547, "behaviors": {"digital": 60, "ecommerce": 35, "traditional": 88, "social": 62, "basket": 100, "topCategory": "Tourisme"}}
+  ],
+  "segments": [
+    {
+      "id": 1,
+      "name": "Natif Digital Urbain",
+      "description": "Jeunes urbains (18-25 ans) hyper-connectés. Ils consomment principalement via les réseaux sociaux (Instagram, TikTok) et privilégient le paiement à la livraison.",
+      "percentage": 18,
+      "avgAge": 22,
+      "ecommerceRate": 92,
+      "socialMediaUsage": 96,
+      "avgBasketSize": 115
+    },
+    {
+      "id": 2,
+      "name": "Cadre Dynamique",
+      "description": "Professionnels résidant dans les grands pôles (Tunis, Sfax, Sousse). Fort pouvoir d'achat, adeptes du 'gain de temps', ils achètent services et produits premium en ligne.",
+      "percentage": 15,
+      "avgAge": 34,
+      "ecommerceRate": 85,
+      "socialMediaUsage": 78,
+      "avgBasketSize": 240
+    },
+    {
+      "id": 3,
+      "name": "Chef de Famille Traditionnel",
+      "description": "Porté sur la consommation de masse et les marchés hebdomadaires ('Souk'). Utilise Facebook pour s'informer des promotions mais préfère l'achat physique.",
+      "percentage": 28,
+      "avgAge": 45,
+      "ecommerceRate": 32,
+      "socialMediaUsage": 65,
+      "avgBasketSize": 160
+    },
+    {
+      "id": 4,
+      "name": "Consommateur Rural",
+      "description": "Mode de vie axé sur l'agriculture et les circuits courts. Faible pénétration du e-commerce due aux défis logistiques du 'dernier kilomètre'.",
+      "percentage": 22,
+      "avgAge": 52,
+      "ecommerceRate": 15,
+      "socialMediaUsage": 38,
+      "avgBasketSize": 85
+    },
+    {
+      "id": 5,
+      "name": "Aspirant Moderne",
+      "description": "Habite en zone périurbaine. En phase de transition digitale, il adopte progressivement les applications de livraison et les services bancaires mobiles.",
+      "percentage": 12,
+      "avgAge": 29,
+      "ecommerceRate": 55,
+      "socialMediaUsage": 82,
+      "avgBasketSize": 130
+    },
+    {
+      "id": 6,
+      "name": "Senior Connecté",
+      "description": "Retraités aisés utilisant le numérique pour rester en contact avec la diaspora. Consomment principalement des services de santé et de voyage.",
+      "percentage": 5,
+      "avgAge": 68,
+      "ecommerceRate": 45,
+      "socialMediaUsage": 50,
+      "avgBasketSize": 280
+    }
+  ],
+  "monthlyTrends": [
+    {"month": "Jan", "consumption": 68.2, "mobility": 55.1, "digital": 62.4, "opinion": 6.8, "economy": 70.5},
+    {"month": "Feb", "consumption": 65.4, "mobility": 56.8, "digital": 63.1, "opinion": 6.9, "economy": 71.2},
+    {"month": "Mar", "consumption": 85.2, "mobility": 68.4, "digital": 70.5, "opinion": 7.5, "economy": 72.8},
+    {"month": "Apr", "consumption": 92.1, "mobility": 72.1, "digital": 75.8, "opinion": 7.8, "economy": 74.1},
+    {"month": "May", "consumption": 75.8, "mobility": 65.3, "digital": 68.2, "opinion": 7.2, "economy": 73.5},
+    {"month": "Jun", "consumption": 78.4, "mobility": 75.2, "digital": 70.1, "opinion": 7.3, "economy": 75.2},
+    {"month": "Jul", "consumption": 88.5, "mobility": 85.6, "digital": 72.4, "opinion": 7.6, "economy": 76.8},
+    {"month": "Aug", "consumption": 90.2, "mobility": 88.1, "digital": 73.5, "opinion": 7.7, "economy": 77.2},
+    {"month": "Sep", "consumption": 72.4, "mobility": 62.5, "digital": 69.8, "opinion": 7.0, "economy": 75.4},
+    {"month": "Oct", "consumption": 70.1, "mobility": 58.4, "digital": 71.2, "opinion": 7.1, "economy": 74.8},
+    {"month": "Nov", "consumption": 74.5, "mobility": 59.2, "digital": 73.4, "opinion": 7.2, "economy": 75.1},
+    {"month": "Dec", "consumption": 82.3, "mobility": 65.4, "digital": 75.6, "opinion": 7.4, "economy": 76.5}
+  ],
+  "pipelineStages": [
+    {"id": 1, "name": "Collecte Multi-Source", "status": "completed", "progress": 100},
+    {"id": 2, "name": "Anonymisation & Conformité", "status": "completed", "progress": 100},
+    {"id": 3, "name": "Ingestion Big Data", "status": "completed", "progress": 100},
+    {"id": 4, "name": "Modélisation Comportementale", "status": "in_progress", "progress": 65},
+    {"id": 5, "name": "Génération d'Insights IA", "status": "in_progress", "progress": 30},
+    {"id": 6, "name": "Visualisation Décisionnelle", "status": "pending", "progress": 0}
+  ]
+}

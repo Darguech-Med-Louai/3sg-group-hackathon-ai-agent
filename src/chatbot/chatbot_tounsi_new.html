@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tchati.ai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --red-deeper: #641E16;
+      --red-light: #E74C3C; --red-glow: #F1948A; --gold: #C9912A;
+      --gold-light: #E8B84B; --gold-dark: #8B5E10; --cream: #FDF6EC;
+      --cream-dark: #EDE3CC; --ink: #1C1510; --text-muted: #7A6A52; --white: #fff;
+    }
+    body { font-family: 'Cairo', sans-serif; background: var(--cream); margin: 0; overflow: hidden; height: 100vh; }
+    
+    /* Background Pattern */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: repeating-conic-gradient(rgba(192,57,43,0.07) 0% 25%, transparent 0% 50%) 0 0 / 36px 36px,
+                        repeating-conic-gradient(rgba(192,57,43,0.07) 0% 25%, transparent 0% 50%) 18px 18px / 36px 36px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .app-container {
+      position: relative; z-index: 1; display: grid;
+      grid-template-columns: 70px 1fr; grid-template-rows: 6px 70px 1fr; height: 100vh;
+    }
+
+    /* ── TOP BORDER ZEILLIGE ── */
+    .zellige-border {
+      grid-column: 1 / -1; grid-row: 1 / 2; height: 6px;
+      background: repeating-linear-gradient(90deg, var(--red-deeper) 0px, var(--red-deeper) 18px, var(--gold) 18px, var(--gold) 20px, var(--red) 20px, var(--red) 38px, var(--gold) 38px, var(--gold) 40px, var(--red-light) 40px, var(--red-light) 58px, var(--gold) 58px, var(--gold) 60px);
+    }
+
+    /* ── HEADER ── */
+    .app-header {
+      grid-column: 2 / -1; grid-row: 2 / 3;
+      background: linear-gradient(135deg, var(--red-deeper) 0%, var(--red-dark) 50%, var(--red) 100%);
+      border-bottom: 3px solid var(--gold); padding: 0 20px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden;
+    }
+    .app-header::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+      animation: shimmer 3.5s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%{left:-100%} 100%{left:200%} }
+
+    .header-avatar { flex-shrink: 0; position: relative; }
+    .avatar-ring {
+      width: 48px; height: 48px; border-radius: 50%; border: 2.5px solid var(--gold);
+      display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25);
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    @keyframes ring-pulse { 0%,100%{box-shadow: 0 0 0 0 rgba(201,145,42,0.4);} 50%{box-shadow: 0 0 0 8px rgba(201,145,42,0.1);} }
+
+    .header-center { flex: 1; }
+    .header-title-main { font-family: 'Amiri', serif; font-size: 20px; font-weight: 700; color: var(--gold-light); }
+    .header-title-sub { font-size: 11px; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #aaa; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      grid-column: 1 / 2; grid-row: 1 / -1; background: linear-gradient(180deg, var(--red-deeper) 0%, #3D0A07 100%);
+      border-right: 2px solid var(--gold-dark); display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 15px;
+    }
+    .form-arrow-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .floating-arrow {
+      font-size: 24px;
+      color: #ffd6d6;
+      text-shadow: 0 0 12px rgba(255,255,255,0.35);
+      animation: floatBlink 1.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes floatBlink { 0%,100%{opacity:1; transform: translateY(0);} 50%{opacity:0.3; transform: translateY(-6px);} }
+    .form-trigger {
+      width: 50px; height: 50px; border-radius: 50%; background: radial-gradient(circle, var(--red) 0%, var(--red-dark) 100%);
+      border: 2.5px solid var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; position: relative; animation: blink-glow 1.6s ease-in-out infinite; transition: 0.2s;
+    }
+    .form-trigger:hover { transform: scale(1.1); }
+    @keyframes blink-glow { 0%,100%{box-shadow: 0 0 0 0 rgba(231,76,60,0);} 50%{box-shadow: 0 0 12px 4px rgba(231,76,60,0.5);} }
+
+    /* ── CHAT MESSAGES ── */
+    .chat-area { grid-column: 2 / -1; grid-row: 3 / -1; display: flex; flex-direction: column; background: var(--cream); position: relative; overflow: hidden; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 1; }
+    .msg { display: flex; gap: 10px; max-width: 85%; }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; position: relative; }
+    .msg.user .msg-bubble { background: linear-gradient(135deg, #7B241C, var(--red-dark)); color: #f8e8d8; border-bottom-right-radius: 4px; }
+    .msg.bot .msg-bubble { background: white; color: var(--ink); border: 1px solid var(--cream-dark); border-bottom-left-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .msg-time { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── INPUT AREA ── */
+    .chat-input-area { padding: 15px 20px; background: white; border-top: 2px solid var(--cream-dark); }
+    .input-row { display: flex; gap: 10px; align-items: center; }
+    .input-wrap { flex: 1; background: var(--cream); border: 1.5px solid var(--cream-dark); border-radius: 30px; padding: 10px 20px; }
+    .input-wrap textarea { width: 100%; border: none; background: transparent; outline: none; font-size: 14px; resize: none; max-height: 100px; }
+    .btn-send { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--red-dark), var(--red-light)); border: 2px solid var(--gold-dark); color: white; cursor: pointer; transition: 0.2s; }
+    .btn-send:hover { transform: rotate(-10deg) scale(1.1); }
+
+    .quick-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .qa-btn { background: var(--cream); border: 1px solid var(--cream-dark); border-radius: 15px; padding: 5px 12px; font-size: 11px; cursor: pointer; transition: 0.2s; }
+    .qa-btn:hover { background: var(--red-dark); color: white; }
+
+    .thinking-dots span { width: 6px; height: 6px; background: var(--red); border-radius: 50%; display: inline-block; animation: bounce 1.4s infinite; margin: 0 2px; }
+    @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--red-dark); color: var(--gold-light); padding: 12px 20px; border-radius: 10px; z-index: 1000; animation: slideIn 0.3s ease-out; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="zellige-border"></div>
+
+  <header class="app-header">
+    <div class="header-avatar">
+      <div class="avatar-ring" id="botAvatar">
+        <svg width="56" height="70" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="36" rx="28" ry="6" fill="#7a0000"/>
+          <rect x="36" y="8" width="48" height="30" rx="4" fill="#c0392b"/>
+          <rect x="36" y="8" width="48" height="10" rx="4" fill="#a93226"/>
+          <line x1="60" y1="8" x2="60" y2="1" stroke="#1a1a1a" stroke-width="1.5"/>
+          <circle cx="60" cy="0" r="3.5" fill="#1a1a1a"/>
+          <ellipse cx="60" cy="16" rx="9" ry="3.5" fill="rgba(255,255,255,0.12)" transform="rotate(-10,50,16)"/>
+          <rect x="51" y="72" width="18" height="14" rx="6" fill="#c8956b"/>
+          <ellipse cx="60" cy="57" rx="24" ry="26" fill="#d4a574"/>
+          <ellipse cx="52" cy="48" rx="8" ry="6" fill="rgba(255,255,255,0.07)"/>
+          <ellipse cx="36" cy="59" rx="5" ry="7" fill="#c8956b"/>
+          <ellipse cx="84" cy="59" rx="5" ry="7" fill="#c8956b"/>
+          <ellipse cx="36" cy="59" rx="2.5" ry="4" fill="#b8845b"/>
+          <ellipse cx="84" cy="59" rx="2.5" ry="4" fill="#b8845b"/>
+          <path d="M47 46 Q52 43 56 45" stroke="#5c3a1e" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M64 45 Q68 43 73 46" stroke="#5c3a1e" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <ellipse cx="51" cy="53" rx="6" ry="5" fill="#fff"/>
+          <ellipse cx="69" cy="53" rx="6" ry="5" fill="#fff"/>
+          <circle cx="51" cy="54" r="3.5" fill="#4a2c0a"/>
+          <circle cx="69" cy="54" r="3.5" fill="#4a2c0a"/>
+          <circle cx="52" cy="54" r="2" fill="#1a0a00"/>
+          <circle cx="70" cy="54" r="2" fill="#1a0a00"/>
+          <circle cx="53" cy="52.5" r="1.2" fill="rgba(255,255,255,0.95)"/>
+          <circle cx="71" cy="52.5" r="1.2" fill="rgba(255,255,255,0.95)"/>
+          <path d="M58 60 Q60 65 62 60" stroke="#b8845b" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <ellipse cx="57" cy="64" rx="3" ry="1.5" fill="#b8845b" opacity="0.45"/>
+          <ellipse cx="63" cy="64" rx="3" ry="1.5" fill="#b8845b" opacity="0.45"/>
+          <path d="M49 70 Q54 67 60 69 Q66 67 71 70" stroke="#3d2007" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M50 74 Q60 82 70 74" stroke="#a0622a" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <rect x="28" y="84" width="64" height="52" rx="14" fill="#7b1a1a"/>
+          <path d="M46 84 L60 99 L74 84" stroke="#5a0f0f" stroke-width="2" fill="none"/>
+          <circle cx="60" cy="103" r="2.2" fill="#5a0f0f"/>
+          <circle cx="60" cy="113" r="2.2" fill="#5a0f0f"/>
+          <rect x="28" y="84" width="64" height="10" rx="14" fill="rgba(255,255,255,0.05)"/>
+          <rect x="9" y="86" width="19" height="10" rx="5" fill="#7b1a1a"/>
+          <circle cx="9" cy="93" r="8.5" fill="#d4a574"/>
+          <rect x="92" y="77" width="19" height="10" rx="5" fill="#7b1a1a"/>
+          <circle cx="113" cy="71" r="9" fill="#d4a574"/>
+          <rect x="108" y="61" width="5" height="11" rx="2.5" fill="#c8956b"/>
+          <rect x="114" y="59" width="5" height="13" rx="2.5" fill="#c8956b"/>
+          <rect x="120" y="62" width="4" height="10" rx="2" fill="#c8956b"/>
+          <rect x="103" y="66" width="4.5" height="9" rx="2" fill="#c8956b" transform="rotate(-22,103,66)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="header-title-main">tchati.ai</div>
+      <div class="header-title-sub">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Vérification d'Ollama...</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="model-badge" id="modelBadge"></div>
+      <button class="qa-btn">
+        <div id="clockDisplay" style="color:rgb(14, 14, 14); font-size: 12px; margin-top:5px;">--:--</div>
+      </button>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="form-arrow-wrapper">
+      <div class="form-trigger" onclick="window.location.href='form.html'">
+        <span style="font-size: 20px;">📋</span>
+      </div>
+      <div class="floating-arrow">⬆</div>
+    </div>
+    <div style="writing-mode: vertical-rl; color: rgb(248, 243, 243); font-size: 15px; letter-spacing: 2px;">نماذج • FORMULAIRES</div>
+  </aside>
+
+  <div class="chat-area">
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">
+        <div class="msg-bubble">
+          Asslema ya sa7bi! 👋 Chnouwa l-programme l-youm? 9oli taw n3awnek.
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="input-row">
+        <div class="input-wrap">
+          <textarea id="userInput" rows="1" placeholder="Type ici... (Derja, Fr, Ar)" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+        </div>
+        <button class="btn-send" onclick="sendMsg()">➤</button>
+      </div>
+      <div class="quick-actions">
+        <button class="qa-btn" onclick="quickSend('Chahwalek?')">Chahwalek?</button>
+        <button class="qa-btn" onclick="quickSend('Donne moi une recette tunisienne')">Recette 🍝</button>
+      
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let ollamaModel = "mon-chatbot";
+  let ollamaUrl = "http://localhost:11434/api/chat";
+  let conversationHistory = [];
+  let sessionId = null;
+
+  // Init
+  window.addEventListener('DOMContentLoaded', () => {
+    updateClock();
+    checkConnection();
+    initSession();
+    setInterval(updateClock, 30000);
+  });
+
+  function initSession() {
+    sessionId = localStorage.getItem('chatSessionId');
+    if (!sessionId) {
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chatSessionId', sessionId);
+    }
+  }
+
+  async function checkConnection() {
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+    try {
+      const res = await fetch("http://localhost:11434/api/tags");
+      if (res.ok) {
+        dot.style.background = "#4ade80";
+        txt.textContent = "Connecté à Ollama • En ligne";
+      }
+    } catch (e) {
+      dot.style.background = "#ff4d4d";
+      txt.textContent = "Ollama déconnecté (Vérifie le terminal)";
+    }
+  }
+
+  async function sendMsg() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    
+    appendMsg(text, true);
+    conversationHistory.push({ role: 'user', content: text });
+    
+    // Enregistrer le message utilisateur dans la BD
+    saveMessage(text, 'user');
+    
+    const thinkingId = appendThinking();
+
+    try {
+      const res = await fetch(ollamaUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: ollamaModel, messages: conversationHistory, stream: false })
+      });
+
+      document.getElementById(thinkingId).remove();
+
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const reply = data.message.content;
+      
+      conversationHistory.push({ role: 'assistant', content: reply });
+      appendMsg(reply, false);
+      
+      // Enregistrer la réponse du bot dans la BD
+      saveMessage(reply, 'bot');
+    } catch (err) {
+      document.getElementById(thinkingId).remove();
+      appendMsg("Désolé sa7bi, fama mochkla m3a Ollama. Chouf l-terminal mte3ek.", false);
+    }
+  }
+
+  async function saveMessage(message, sender) {
+    try {
+      await fetch('save_message.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: message,
+          sender: sender,
+          session_id: sessionId
+        })
+      });
+    } catch (err) {
+      console.error('Erreur lors de l\'enregistrement du message:', err);
+    }
+  }
+
+  function appendMsg(content, isUser) {
+    const box = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg ' + (isUser ? 'user' : 'bot');
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = formatText(content);
+    
+    div.appendChild(bubble);
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function appendThinking() {
+    const id = 'think-' + Date.now();
+    const box = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.id = id;
+    div.innerHTML = `<div class="msg-bubble thinking-dots">Nkhammem<span></span><span></span><span></span></div>`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    return id;
+  }
+
+  function formatText(t) {
+    return t.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/`(.*?)`/g, '<code>$1</code>');
+  }
+
+  function quickSend(t) { document.getElementById('userInput').value = t; sendMsg(); }
+  function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } }
+  function autoResize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  function updateClock() { document.getElementById('clockDisplay').textContent = new Date().toLocaleTimeString('fr-TN', {hour:'2-digit', minute:'2-digit'}); }
+  
+  function showToast(m) {
+    const t = document.createElement('div'); t.className = 'toast'; t.textContent = m;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+</script>
+</body>
+</html>

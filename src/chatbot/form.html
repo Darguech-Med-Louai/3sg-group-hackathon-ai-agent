@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enquête sur les comportements d'achat</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fdf2f2;
+      --card: #ffffff;
+      --border: #fcd5d5;
+      --accent: #c0392b;
+      --accent-light: #fdecea;
+      --accent-hover: #96281b;
+      --text: #1a0a0a;
+      --muted: #7a5555;
+      --radio-size: 20px;
+      --transition: 0.2s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 64px;
+    }
+
+    .form-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-card {
+      background: var(--card);
+      border-radius: 12px;
+      border-top: 8px solid var(--accent);
+      padding: 28px 28px 24px;
+      box-shadow: 0 2px 8px rgba(192,57,43,0.10);
+    }
+
+    .header-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .header-card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .section-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 8px rgba(192,57,43,0.06);
+      border: 1px solid var(--border);
+      transition: box-shadow var(--transition);
+    }
+
+    .section-card:focus-within {
+      box-shadow: 0 4px 16px rgba(192,57,43,0.14);
+      border-color: #f5a9a9;
+    }
+
+    .question-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 18px;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .required-star {
+      color: #e53935;
+      margin-left: 4px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--transition);
+      user-select: none;
+    }
+
+    .option-item:hover { background: var(--accent-light); }
+
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: var(--radio-size);
+      height: var(--radio-size);
+      border: 2px solid #aaa;
+      flex-shrink: 0;
+      transition: border-color var(--transition), background var(--transition);
+      cursor: pointer;
+    }
+
+    .option-item input[type="radio"]  { border-radius: 50%; }
+    .option-item input[type="checkbox"] { border-radius: 4px; }
+
+    .option-item input[type="radio"]:checked {
+      border-color: var(--accent);
+      background: radial-gradient(circle, var(--accent) 40%, transparent 42%);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .option-item input[type="checkbox"]:checked {
+      border-color: var(--accent);
+      background: var(--accent);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.5 3.5L6 11 2.5 7.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-size: 70%;
+      background-position: center;
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .option-item:has(input:checked) { background: var(--accent-light); }
+
+    .option-text { font-size: 0.92rem; color: var(--text); }
+
+    .text-field {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text);
+      padding: 8px 0;
+      background: transparent;
+      transition: border-color var(--transition);
+      resize: none;
+    }
+
+    .text-field:focus { border-bottom: 2px solid var(--accent); }
+    .text-field::placeholder { color: #bbb; }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-submit {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-submit:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+    .btn-clear {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .btn-clear:hover { color: var(--accent-hover); }
+
+    /* Message d'erreur */
+    .error-msg {
+      display: none;
+      background: #fff3f3;
+      border: 1px solid #f5a9a9;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: var(--accent);
+    }
+    .error-msg.show { display: block; }
+
+    /* Loader */
+    .loader {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .loader.show { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Succès */
+    .success-overlay {
+      display: none;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 48px 28px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(192,57,43,0.08);
+      border: 1px solid var(--border);
+    }
+    .success-overlay.show { display: block; }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.8rem;
+    }
+
+    .success-overlay h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .success-overlay p { font-size: 0.9rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== FORMULAIRE ===== -->
+  <div class="form-wrapper" id="formWrapper">
+
+    <div class="header-card">
+      <h1>Enquête sur les comportements d'achat</h1>
+      <p>Aidez-nous à mieux comprendre vos habitudes de consommation. Cette enquête est anonyme et ne prend que quelques minutes.</p>
+    </div>
+
+    <!-- Message d'erreur global -->
+    <div class="error-msg" id="errorMsg">⚠️ Veuillez répondre à toutes les questions obligatoires (marquées *).</div>
+
+    <!-- Q1: Tranche d'âge -->
+    <div class="section-card">
+      <label class="question-label">Tranche d'âge <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="age" value="-18" /><span class="option-text">-18</span></label>
+        <label class="option-item"><input type="radio" name="age" value="18-25" /><span class="option-text">18–25</span></label>
+        <label class="option-item"><input type="radio" name="age" value="26-35" /><span class="option-text">26–35</span></label>
+        <label class="option-item"><input type="radio" name="age" value="36-50" /><span class="option-text">36–50</span></label>
+        <label class="option-item"><input type="radio" name="age" value="50+" /><span class="option-text">50+</span></label>
+      </div>
+    </div>
+
+    <!-- Q2: Genre -->
+    <div class="section-card">
+      <label class="question-label">Genre <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="genre" value="homme" /><span class="option-text">Homme</span></label>
+        <label class="option-item"><input type="radio" name="genre" value="femme" /><span class="option-text">Femme</span></label>
+        <label class="option-item"><input type="radio" name="genre" value="autre" /><span class="option-text">Autre</span></label>
+      </div>
+    </div>
+
+    <!-- Q3: Gouvernorat -->
+    <div class="section-card">
+      <label class="question-label">Gouvernorat <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="gouvernorat" value="tunis" /><span class="option-text">Tunis</span></label>
+        <label class="option-item"><input type="radio" name="gouvernorat" value="sfax" /><span class="option-text">Sfax</span></label>
+        <label class="option-item"><input type="radio" name="gouvernorat" value="sousse" /><span class="option-text">Sousse</span></label>
+        <label class="option-item"><input type="radio" name="gouvernorat" value="nabeul" /><span class="option-text">Nabeul</span></label>
+        <label class="option-item"><input type="radio" name="gouvernorat" value="autre" /><span class="option-text">Autre</span></label>
+      </div>
+    </div>
+
+    <!-- Q4: Situation professionnelle -->
+    <div class="section-card">
+      <label class="question-label">Situation professionnelle <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="situation" value="etudiant" /><span class="option-text">Étudiant</span></label>
+        <label class="option-item"><input type="radio" name="situation" value="salarie" /><span class="option-text">Salarié</span></label>
+        <label class="option-item"><input type="radio" name="situation" value="independant" /><span class="option-text">Indépendant</span></label>
+        <label class="option-item"><input type="radio" name="situation" value="sans-emploi" /><span class="option-text">Sans emploi</span></label>
+      </div>
+    </div>
+
+    <!-- Q5: Revenu mensuel -->
+    <div class="section-card">
+      <label class="question-label">Revenu mensuel <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="revenu" value="<500" /><span class="option-text">&lt; 500 DT</span></label>
+        <label class="option-item"><input type="radio" name="revenu" value="500-1000" /><span class="option-text">500 – 1 000 DT</span></label>
+        <label class="option-item"><input type="radio" name="revenu" value="1000-2000" /><span class="option-text">1 000 – 2 000 DT</span></label>
+        <label class="option-item"><input type="radio" name="revenu" value=">2000" /><span class="option-text">&gt; 2 000 DT</span></label>
+      </div>
+    </div>
+
+    <!-- Q6: Fréquence d'achat -->
+    <div class="section-card">
+      <label class="question-label">Fréquence d'achat <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="frequence" value="jamais" /><span class="option-text">Jamais</span></label>
+        <label class="option-item"><input type="radio" name="frequence" value="1-fois-mois" /><span class="option-text">1 fois/mois</span></label>
+        <label class="option-item"><input type="radio" name="frequence" value="2-3-fois-mois" /><span class="option-text">2–3 fois/mois</span></label>
+        <label class="option-item"><input type="radio" name="frequence" value="1-fois-semaine" /><span class="option-text">1 fois/semaine</span></label>
+        <label class="option-item"><input type="radio" name="frequence" value="plusieurs-fois-semaine" /><span class="option-text">Plusieurs fois/semaine</span></label>
+      </div>
+    </div>
+
+    <!-- Q7: Canal d'achat principal -->
+    <div class="section-card">
+      <label class="question-label">Canal d'achat principal <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="canal" value="magasin" /><span class="option-text">Magasin physique</span></label>
+        <label class="option-item"><input type="radio" name="canal" value="en-ligne" /><span class="option-text">En ligne</span></label>
+        <label class="option-item"><input type="radio" name="canal" value="mixte" /><span class="option-text">Mixte</span></label>
+      </div>
+    </div>
+
+    <!-- Q8: Budget mensuel -->
+    <div class="section-card">
+      <label class="question-label">Budget mensuel <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="budget" value="<100" /><span class="option-text">&lt; 100 DT</span></label>
+        <label class="option-item"><input type="radio" name="budget" value="100-300" /><span class="option-text">100–300 DT</span></label>
+        <label class="option-item"><input type="radio" name="budget" value="300-600" /><span class="option-text">300–600 DT</span></label>
+        <label class="option-item"><input type="radio" name="budget" value=">600" /><span class="option-text">&gt; 600 DT</span></label>
+      </div>
+    </div>
+
+    <!-- Q9: Catégories achetées (checkbox) -->
+    <div class="section-card">
+      <label class="question-label">Catégories achetées <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="checkbox" name="categories" value="alimentaire" /><span class="option-text">Alimentaire</span></label>
+        <label class="option-item"><input type="checkbox" name="categories" value="electronique" /><span class="option-text">Électronique</span></label>
+        <label class="option-item"><input type="checkbox" name="categories" value="vetements" /><span class="option-text">Vêtements</span></label>
+        <label class="option-item"><input type="checkbox" name="categories" value="beaute" /><span class="option-text">Beauté</span></label>
+        <label class="option-item"><input type="checkbox" name="categories" value="maison" /><span class="option-text">Maison</span></label>
+      </div>
+    </div>
+
+    <!-- Q10: Facteur principal d'achat -->
+    <div class="section-card">
+      <label class="question-label">Facteur principal d'achat <span class="required-star">*</span></label>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="facteur" value="prix" /><span class="option-text">Prix</span></label>
+        <label class="option-item"><input type="radio" name="facteur" value="qualite" /><span class="option-text">Qualité</span></label>
+        <label class="option-item"><input type="radio" name="facteur" value="marque" /><span class="option-text">Marque</span></label>
+        <label class="option-item"><input type="radio" name="facteur" value="promotion" /><span class="option-text">Promotion</span></label>
+      </div>
+    </div>
+
+    <!-- Q11: Texte libre -->
+    <div class="section-card">
+      <label class="question-label">Qu'est-ce qui influence vos décisions d'achat ?</label>
+      <textarea class="text-field" name="influence" rows="3" placeholder="Votre réponse"></textarea>
+    </div>
+
+    <!-- Footer -->
+    <div class="section-card form-footer">
+      <button class="btn-submit" id="btnSubmit" onclick="handleSubmit(event)">
+        Envoyer <span class="loader" id="loader"></span>
+      </button>
+      <button class="btn-clear" onclick="handleClear()">Effacer le formulaire</button>
+    </div>
+
+  </div>
+
+  <!-- ===== SUCCÈS ===== -->
+  <div class="form-wrapper" id="successWrapper" style="display:none">
+    <div class="success-overlay show">
+      <div class="success-icon">✓</div>
+      <h2>Réponse enregistrée</h2>
+      <p>Merci d'avoir rempli ce formulaire. Vos réponses ont bien été soumises.</p>
+    </div>
+  </div>
+
+  <script>
+    // ================================================================
+    //  CONFIGURATION
+    //  👉 Changez cette URL pour pointer vers votre backend
+    //     Exemple PHP   : "submit.php"
+    //     Exemple Node  : "http://localhost:3000/api/reponses"
+    //     Exemple Python: "http://localhost:5000/api/reponses"
+    // ================================================================
+    const API_URL = "/api/reponses";
+
+    // ================================================================
+    //  VALIDATION
+    // ================================================================
+    function validerFormulaire() {
+      const champsObligatoires = [
+        'age', 'genre', 'gouvernorat', 'situation',
+        'revenu', 'frequence', 'canal', 'budget', 'facteur'
+      ];
+
+      for (const nom of champsObligatoires) {
+        if (!document.querySelector(`input[name="${nom}"]:checked`)) {
+          return false;
+        }
+      }
+
+      // Au moins une catégorie cochée
+      if (!document.querySelector('input[name="categories"]:checked')) {
+        return false;
+      }
+
+      return true;
+    }
+
+    // ================================================================
+    //  COLLECTE DES DONNÉES DU FORMULAIRE
+    // ================================================================
+    function collecterDonnees() {
+      const radio = (nom) => {
+        const el = document.querySelector(`input[name="${nom}"]:checked`);
+        return el ? el.value : null;
+      };
+
+      const categories = Array.from(
+        document.querySelectorAll('input[name="categories"]:checked')
+      ).map(el => el.value);
+
+      return {
+        age:         radio('age'),
+        genre:       radio('genre'),
+        gouvernorat: radio('gouvernorat'),
+        situation:   radio('situation'),
+        revenu:      radio('revenu'),
+        frequence:   radio('frequence'),
+        canal:       radio('canal'),
+        budget:      radio('budget'),
+        categories:  categories,
+        facteur:     radio('facteur'),
+        influence:   document.querySelector('textarea[name="influence"]').value.trim() || null
+      };
+    }
+
+    // ================================================================
+    //  SOUMISSION
+    // ================================================================
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.classList.remove('show');
+
+      // Validation
+      if (!validerFormulaire()) {
+        errorMsg.classList.add('show');
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // UI — état chargement
+      const btn = document.getElementById('btnSubmit');
+      const loader = document.getElementById('loader');
+      btn.disabled = true;
+      loader.classList.add('show');
+
+      const donnees = collecterDonnees();
+
+      try {
+        // ── ENVOI AU BACKEND ──────────────────────────────────────────
+        const reponse = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(donnees)
+        });
+
+        if (!reponse.ok) {
+          throw new Error(`Erreur serveur : ${reponse.status}`);
+        }
+
+        // Succès → afficher le message de confirmation
+        document.getElementById('formWrapper').style.display = 'none';
+        document.getElementById('successWrapper').style.display = 'flex';
+
+      } catch (err) {
+        console.error('Erreur lors de la soumission :', err);
+        errorMsg.textContent = '❌ Une erreur est survenue lors de l\'envoi. Veuillez réessayer.';
+        errorMsg.classList.add('show');
+        btn.disabled = false;
+        loader.classList.remove('show');
+      }
+    }
+
+    // ================================================================
+    //  EFFACER LE FORMULAIRE
+    // ================================================================
+    function handleClear() {
+      if (confirm('Effacer toutes les réponses ?')) {
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
+          .forEach(i => i.checked = false);
+        document.querySelectorAll('textarea')
+          .forEach(t => t.value = '');
+        document.getElementById('errorMsg').classList.remove('show');
+      }
+    }
+  </script>
+
+  <!--
+  =================================================================
+  BACKEND REQUIS — exemples de scripts à créer séparément :
+
+  ── PHP (submit.php) ──────────────────────────────────────────────
+  <?php
+  header('Content-Type: application/json');
+  $data = json_decode(file_get_contents('php://input'), true);
+  $pdo  = new PDO('sqlite:enquete.db'); // ou mysql:host=...
+  $stmt = $pdo->prepare("INSERT INTO reponses
+    (age, genre, gouvernorat, situation, revenu, frequence, canal, budget, facteur, influence)
+    VALUES (?,?,?,?,?,?,?,?,?,?)");
+  $stmt->execute([
+    $data['age'], $data['genre'], $data['gouvernorat'], $data['situation'],
+    $data['revenu'], $data['frequence'], $data['canal'], $data['budget'],
+    $data['facteur'], $data['influence']
+  ]);
+  $id = $pdo->lastInsertId();
+  foreach ($data['categories'] as $cat) {
+    $pdo->prepare("INSERT INTO reponse_categories (reponse_id, categorie) VALUES (?,?)")
+        ->execute([$id, $cat]);
+  }
+  echo json_encode(['success' => true, 'id' => $id]);
+
+  ── Node.js / Express (server.js) ─────────────────────────────────
+  const express = require('express');
+  const Database = require('better-sqlite3');
+  const app = express();
+  app.use(express.json());
+  const db = new Database('enquete.db');
+  app.post('/api/reponses', (req, res) => {
+    const d = req.body;
+    const info = db.prepare(`INSERT INTO reponses
+      (age,genre,gouvernorat,situation,revenu,frequence,canal,budget,facteur,influence)
+      VALUES (?,?,?,?,?,?,?,?,?,?)`
+    ).run(d.age,d.genre,d.gouvernorat,d.situation,d.revenu,
+           d.frequence,d.canal,d.budget,d.facteur,d.influence);
+    const ins = db.prepare(
+      'INSERT INTO reponse_categories (reponse_id, categorie) VALUES (?,?)');
+    d.categories.forEach(c => ins.run(info.lastInsertRowid, c));
+    res.json({ success: true, id: info.lastInsertRowid });
+  });
+  app.listen(3000, () => console.log('Serveur sur http://localhost:3000'));
+
+  ── Python / Flask (app.py) ───────────────────────────────────────
+  from flask import Flask, request, jsonify
+  import sqlite3
+  app = Flask(__name__)
+  @app.post('/api/reponses')
+  def ajouter():
+      d = request.json
+      con = sqlite3.connect('enquete.db')
+      cur = con.cursor()
+      cur.execute("""INSERT INTO reponses
+        (age,genre,gouvernorat,situation,revenu,frequence,canal,budget,facteur,influence)
+        VALUES (?,?,?,?,?,?,?,?,?,?)""",
+        (d['age'],d['genre'],d['gouvernorat'],d['situation'],d['revenu'],
+         d['frequence'],d['canal'],d['budget'],d['facteur'],d.get('influence')))
+      rid = cur.lastrowid
+      for cat in d.get('categories', []):
+          cur.execute("INSERT INTO reponse_categories VALUES (NULL,?,?)", (rid,cat))
+      con.commit(); con.close()
+      return jsonify(success=True, id=rid)
+  if __name__ == '__main__': app.run(debug=True)
+  =================================================================
+  -->
+
+</body>
+</html>
